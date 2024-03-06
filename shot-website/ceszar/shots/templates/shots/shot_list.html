@@ -1,0 +1,19 @@
+{% extends "shots/base.html" %}
+{% block content %}
+
+  <table class='table table-bordered'>
+      <tr>
+        <th>Shot Number</th>
+        <th>Gas Configuration</th>
+      </tr>
+      {% for shot in shot_list %}
+      <tr>
+        <td>
+          <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a> 
+        </td>
+        <td> {{shot.gasConfig}} </td>
+      </tr>
+      {% endfor %}
+  </table>
+
+{% endblock content %}

@@ -1,8 +1,23 @@
 from django.shortcuts import render
+from .models import Shot, Gas
+from django.views import generic
 
-# Create your views here.
-from django.http import HttpResponse
 
+def home(request):
+    return render(request,
+                  "shots/home.html",
+                  context={}
+                  )
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class ShotListView(generic.ListView):
+    model = Shot
+
+class ShotDetailView(generic.DetailView):
+    model = Shot
+
+'''
+    def get_context_data(self, **kwargs):
+        shot = self.get_object()
+        context['diagnosticImage'] = shot.diagnosticimage_set.all()
+        return context
+'''

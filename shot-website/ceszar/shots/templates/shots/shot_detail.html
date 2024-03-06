@@ -1,0 +1,65 @@
+{% extends "shots/base.html" %}
+{% block content %}
+
+  <h1 style="color:#00629B">Shot {{shot.num}}</h1>
+  <div class='row'>
+    <div class='col-sm'>
+      <table class='table table-bordered ' style="color:#13294b">
+        <tr>
+          <th>Outer Liner</th>
+          {% if shot.gasConfig.outer %}
+            <td>{{shot.gasConfig.outer}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>OL Pressure [psi]</th>
+          {% if shot.outer_press %}
+            <td>{{shot.outer_press}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>Inner Liner</th>
+          {% if shot.gasConfig.inner %}
+            <td>{{shot.gasConfig.inner}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>IL Pressure [psi]</th>
+          {% if shot.inner_press %}
+            <td>{{shot.inner_press}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>Central Jet Liner</th>
+          {% if shot.gasConfig.target %}
+            <td>{{shot.gasConfig.target}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>CJ Pressure [psi]</th>
+          {% if shot.target_press %}
+            <td>{{shot.target_press}}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+      </table>
+    </div>
+    <div class='col-sm'>
+      hi
+      <img src="media/images/xuv/1167_MCP2.JPG" class ='img-fluid'>
+    </div>
+  </div>
+
+
+{% endblock content %}

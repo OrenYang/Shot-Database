@@ -3,63 +3,204 @@
 
   <h1 style="color:#00629B">Shot {{shot.num}}</h1>
   <div class='row'>
-    <div class='col-sm'>
-      <table class='table table-bordered ' style="color:#13294b">
-        <tr>
-          <th>Outer Liner</th>
+    <div class='col-sm-7'>
+      <button type="button" class="collapsible">Gas Configuration</button>
+      <div class='content' style="display: block">
+        <table class='table table-bordered' style="color:#13294b">
+          <tr>
+            <th></th>
+            <th>Gas</th>
+            <th>Pressure [psia]</th>
+            <th>Timing [&#956;s]</th>
+          </tr>
           {% if shot.gasConfig.outer %}
-            <td>{{shot.gasConfig.outer}}</td>
-          {% else %}
-            <td>-</td>
+          <tr>
+              <th>Outer Liner</th>
+              <td>{{shot.gasConfig.outer}}</td>
+              {% if shot.outer_press %}
+                <td>{{shot.outer_press}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+              {% if shot.outer_timing %}
+                <td>{{shot.outer_timing}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+          </tr>
           {% endif %}
-        </tr>
-        <tr>
-          <th>OL Pressure [psi]</th>
-          {% if shot.outer_press %}
-            <td>{{shot.outer_press}}</td>
-          {% else %}
-            <td>-</td>
-          {% endif %}
-        </tr>
-        <tr>
-          <th>Inner Liner</th>
           {% if shot.gasConfig.inner %}
-            <td>{{shot.gasConfig.inner}}</td>
-          {% else %}
-            <td>-</td>
+          <tr>
+              <th>Inner Liner</th>
+              <td>{{shot.gasConfig.inner}}</td>
+              {% if shot.inner_press %}
+                <td>{{shot.inner_press}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+              {% if shot.inner_timing %}
+                <td>{{shot.inner_timing}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+          </tr>
           {% endif %}
-        </tr>
-        <tr>
-          <th>IL Pressure [psi]</th>
-          {% if shot.inner_press %}
-            <td>{{shot.inner_press}}</td>
-          {% else %}
-            <td>-</td>
-          {% endif %}
-        </tr>
-        <tr>
-          <th>Central Jet Liner</th>
           {% if shot.gasConfig.target %}
-            <td>{{shot.gasConfig.target}}</td>
-          {% else %}
-            <td>-</td>
+          <tr>
+              <th>Central Jet</th>
+              <td>{{shot.gasConfig.target}}</td>
+              {% if shot.target_press %}
+                <td>{{shot.target_press}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+              {% if shot.target_timing %}
+                <td>{{shot.target_timing}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+          </tr>
           {% endif %}
-        </tr>
-        <tr>
-          <th>CJ Pressure [psi]</th>
-          {% if shot.target_press %}
-            <td>{{shot.target_press}}</td>
-          {% else %}
-            <td>-</td>
+        </table>
+      </div>
+      <button type="button" class="collapsible">LTD Pluse</button>
+      <div class='content' style="display: block">
+        <table class='table table-bordered ' style="color:#13294b">
+          <tr>
+            <th width='50%'>I<sub>peak</sub> [kA]</th>
+            <td>
+            {% if shot.current %}
+              {{shot.current}}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>T<sub>peak</sub> [ns]</th>
+            <td>
+            {% if shot.current_time %}
+              {{shot.current_time}}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+          </tr>
+          {% if shot.dip_time %}
+          <tr>
+            <th>T<sub>dip</sub> [ns]</th>
+            <td>{{shot.dip_time}}</td>
+          </tr>
           {% endif %}
+        </table>
+      </div>
+      {% if shot.xrayDetector.all %}
+      <button type="button" class="collapsible">X-Ray Detectors</button>
+      <div class='content' style='display: block'>
+        <table class='table table-bordered ' style="color:#13294b">
+          <tr><th></th><th>Filter</th><th>Start Time [ns]</th><th>Peak Time [ns]</th><th>Peak Voltage [V]</th></tr>
+          {% for xd in shot.xrayDetector.all %}
+          <tr>
+            <th>XD{{xd.num}}</th>
+            <td>{{xd.filter.thickness}}&#956;m {{xd.filter.mat}}</td>
+            <td>
+              {% if xd.start %}
+                {{xd.start}}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              {% if xd.peak_time %}
+                {{xd.peak_time}}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              {% if xd.peak_volt %}
+                {{xd.peak_volt}}
+              {% else %}
+                -
+              {% endif %}
+            </td>
         </tr>
+        {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+      {% if shot.xuvImage.all %}
+      <button type="button" class="collapsible">Time-Gated XUV Imaging</button>
+      <div class='content' style='display: block'>
+        <table class='table table-bordered ' style="color:#13294b">
+          <tr><th></th><th>Frame 1 [ns]</th><th>Frame 2 [ns]</th><th>Frame 3 [ns]</th><th>Frame 4 [ns]</th></tr>
+          {% for image in shot.xuvImage.all %}
+          <tr>
+            <th>XUV Camera {{image.num}}</th>
+            <td>{{image.frame1}}</td>
+            <td>{{image.frame2}}</td>
+            <td>{{image.frame3}}</td>
+            <td>{{image.frame4}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+      <table class='table table-bordered ' style="color:#13294b">
+          <tr><td colspan='2'>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+          <tr><td>hi</td></tr>
+
       </table>
     </div>
-    <div class='col-sm'>
-      hi
-      <img src="media/images/xuv/1167_MCP2.JPG" class ='img-fluid'>
+    <div class='col-sm-5'>
+      <div class='sticky'>
+        <h2>
+          {% for image in shot.xuvImage.all %}
+            XUV Camera {{image.num}}
+        <br><img src="{{image.image.url}}" class='fit-image'><br>
+        {% endfor %}
+      </div>
     </div>
   </div>
 
+  <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+  </script>
 
 {% endblock content %}

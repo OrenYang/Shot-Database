@@ -3,7 +3,7 @@
 
   <h1 style="color:#00629B">Shot {{shot.num}}</h1>
   <div class='row'>
-    <div class='col-sm-7'>
+    <div class='col-sm-7' style='margin-bottom: 150px'>
       <button type="button" class="collapsible">Gas Configuration</button>
       <div class='content' style="display: block">
         <table class='table table-bordered' style="color:#13294b">
@@ -133,7 +133,7 @@
       <button type="button" class="collapsible">Time-Gated XUV Imaging</button>
       <div class='content' style='display: block'>
         <table class='table table-bordered ' style="color:#13294b">
-          <tr><th></th><th>Frame 1 [ns]</th><th>Frame 2 [ns]</th><th>Frame 3 [ns]</th><th>Frame 4 [ns]</th></tr>
+          <tr><th width='22%'></th><th>Frame 1 [ns]</th><th>Frame 2 [ns]</th><th>Frame 3 [ns]</th><th>Frame 4 [ns]</th><th>Charge [kV]</th></tr>
           {% for image in shot.xuvImage.all %}
           <tr>
             <th>XUV Camera {{image.num}}</th>
@@ -141,39 +141,43 @@
             <td>{{image.frame2}}</td>
             <td>{{image.frame3}}</td>
             <td>{{image.frame4}}</td>
+            <td>{{image.charge}}</td>
           </tr>
           {% endfor %}
         </table>
       </div>
       {% endif %}
-      <table class='table table-bordered ' style="color:#13294b">
-          <tr><td colspan='2'>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-          <tr><td>hi</td></tr>
-
-      </table>
+      {% if shot.schlieren.all %}
+      <button type="button" class="collapsible">Schlieren</button>
+      <div class='content' style='display: block'>
+        <table class='table table-bordered ' style="color:#13294b">
+          <tr><th width='50%'></th><th>Time [ns]</th></tr>
+          {% for sch in shot.schlieren.all %}
+            <tr><th>Schlieren {{sch.num}}</th><td>{{sch.time}}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+      <button type="button" class="collapsible">LTD Parameters</button>
+      <div class='content' style='display: block'>
+        <table class='table table-bordered ' style="color:#13294b">
+          <tr><th width='50%'>Cavity Voltage [kV]</th><td>{{shot.cavity_v}}</td></tr>
+          <tr><th>Cavity Pressure [psig]</th><td>{{shot.cavity_p}}</td></tr>
+          <tr><th>Trigger Voltage [kV]</th><td>{{shot.trigger_v}}</td></tr>
+          <tr><th>Trigger Pressure [psig]</th><td>{{shot.trigger_p}}</td></tr>
+          <tr><th>Maxwell Pressure [psig]</th><td>{{shot.maxwell_p}}</td></tr>
+          <tr><th>Premag Voltage [kV]</th><td>{{shot.premag_v}}</td></tr>
+          <tr><th>Premag Timing [&#956;s]</th><td>{{shot.premag_t}}</td></tr>
+          <tr>
+            <th>Chamber Pressure [Torr]</th>
+            <td><script>
+            var num={{ shot.pressure }};
+            var val = num.toExponential(2);
+            document.write( val );
+          </script> </td>
+        </tr>
+        </table>
+      </div>
     </div>
     <div class='col-sm-5'>
       <div class='sticky'>

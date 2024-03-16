@@ -118,3 +118,16 @@ class XuvImage(models.Model):
 
     def __str__(self):
         return 'XUV Camera {} from shot {}'.format(self.num, self.shot.num)
+
+
+class Schlieren(models.Model):
+
+    name = 'schlieren'
+    shot = models.ForeignKey(Shot, on_delete=models.CASCADE, related_name='schlieren', null=True)
+    num = models.IntegerField(null=True, blank=True)
+
+    time = models.FloatField(null=True, blank=True)
+    image = models.ImageField(upload_to=image_upload_dir, null=True, blank=True)
+
+    def __str__(self):
+        return 'Schlieren {} from shot {}'.format(self.num, self.shot.num)

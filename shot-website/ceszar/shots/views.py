@@ -14,10 +14,3 @@ class ShotListView(generic.ListView):
 
 class ShotDetailView(generic.DetailView):
     model = Shot
-
-'''
-    def get_context_data(self, **kwargs):
-        shot = self.get_object()
-        context['diagnosticImage'] = shot.diagnosticimage_set.all()
-        return context
-'''

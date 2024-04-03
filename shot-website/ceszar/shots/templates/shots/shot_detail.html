@@ -4,6 +4,17 @@
   <h1 style="color:#00629B">Shot {{shot.num}}</h1>
   <div class='row'>
     <div class='col-sm-7' style='margin-bottom: 150px'>
+      <button type="button" class="collapsible">Notes</button>
+      <div class='content' style="display: block">
+        <table class='table table-bordered' style="color:#13294b">
+          <tr>
+            <th>Pre-shot Notes</th><td>{{shot.preNotes}}</td>
+          </tr>
+          <tr>
+            <th>Post-shot Notes</th><td>{{shot.postNotes}}</td>
+          </tr>
+        </table>
+      </div>
       <button type="button" class="collapsible">Gas Configuration</button>
       <div class='content' style="display: block">
         <table class='table table-bordered' style="color:#13294b">
@@ -15,7 +26,11 @@
           </tr>
           {% if shot.gasConfig.outer %}
           <tr>
-              <th>Outer Liner</th>
+              {% if shot.gasConfig.inner %}
+                <th>Outer Liner</th>
+              {% else %}
+                <th>Liner</th>
+              {% endif %}
               <td>{{shot.gasConfig.outer}}</td>
               {% if shot.outer_press %}
                 <td>{{shot.outer_press}}</td>
@@ -31,7 +46,11 @@
           {% endif %}
           {% if shot.gasConfig.inner %}
           <tr>
-              <th>Inner Liner</th>
+              {% if shot.gasConfig.outer %}
+                <th>Inner Liner</th>
+              {% else %}
+                <th>Liner</th>
+              {% endif %}
               <td>{{shot.gasConfig.inner}}</td>
               {% if shot.inner_press %}
                 <td>{{shot.inner_press}}</td>

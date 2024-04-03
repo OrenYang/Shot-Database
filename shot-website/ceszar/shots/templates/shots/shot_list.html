@@ -5,13 +5,25 @@
       <tr>
         <th>Shot Number</th>
         <th>Gas Configuration</th>
+        <th>Current [kA]</th>
       </tr>
       {% for shot in shot_list %}
       <tr>
         <td>
-          <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a> 
+          <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a>
         </td>
         <td> {{shot.gasConfig}} </td>
+        {% if shot.inner_press >= 10 %}
+          <td bgcolor='#d6b4fc'>
+        {% elif shot.outer_press >= 10 %}
+          <td bgcolor='#d6b4fc'>
+        {% elif shot.current >= 400 %}
+          <td bgcolor='lightgreen'>
+        {% else %}
+          <td>
+        {% endif %}
+        {{shot.current}}</td>
+
       </tr>
       {% endfor %}
   </table>

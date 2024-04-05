@@ -12,5 +12,6 @@ def home(request):
 class ShotListView(generic.ListView):
     model = Shot
 
+
 class ShotDetailView(generic.DetailView):
     model = Shot

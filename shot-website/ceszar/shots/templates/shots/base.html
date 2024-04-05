@@ -19,6 +19,15 @@
   height: 35px;
   margin-top: 0px;
   }
+
+  #arrows {
+    position: sticky;
+    top: 75px;
+    display: inline-block;
+    margin-right: 50px;
+    margin-left: 75px;
+    font-size: 25pt;
+  }
 </style>
 <head>
       <!-- Required meta tags -->
@@ -32,7 +41,7 @@
 
       <title>Shot Database</title>
 </head>
-<body >
+<body>
     <header class="site-header">
       <nav class="navbar navbar-custom navbar-expand-md navbar-dark fixed-top">
         <img src='/media/images/ucsd-logo.png' class='img-fluid logo-image'>
@@ -49,6 +58,12 @@
         </div>
       </nav>
     </header>
+    <div id="arrows" class="content">
+      {% block top %}{% endblock %}
+    </div>
+    <div style="display:inline-block;" class="container">
+      {% block detail %}{% endblock %}
+    </div>
     <main role="main" class="container">
       <div class="row">
         <div class="col-sm" >

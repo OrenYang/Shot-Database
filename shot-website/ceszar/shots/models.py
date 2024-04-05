@@ -82,12 +82,34 @@ class Shot(models.Model):
 
     bubbles = models.IntegerField(null=True, blank=True)
 
+
     def __str__(self):
         con = str(self.gasConfig)
         return 'Shot {}: {}'.format(self.num, con.split(':')[1])
 
     def get_absolute_url(self):
         return reverse('shot-detail', args=[str(self.id)])
+
+    def get_next_absolute_url(self):
+        shots = Shot.objects.filter(num__gt=self.num)
+        shots = shots.order_by('num')
+        next = shots.first()
+        if next == None:
+            shots = Shot.objects.filter(num__lt=self.num)
+            shots = shots.order_by('num')
+            next = shots.first()
+        return reverse('shot-detail', args=[str(next.id)])
+
+    def get_previous_absolute_url(self):
+        shots = Shot.objects.filter(num__lt=self.num)
+        shots = shots.order_by('num')
+        prev = shots.last()
+        if prev == None:
+            shots = Shot.objects.filter(num__gt=self.num)
+            shots = shots.order_by('num')
+            prev = shots.last()
+            return reverse('shot-detail', args=[str(prev.id)])
+        return reverse('shot-detail', args=[str(prev.id)])
 
 
 class Filter(models.Model):

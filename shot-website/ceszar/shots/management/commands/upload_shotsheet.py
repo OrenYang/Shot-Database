@@ -13,10 +13,16 @@ class Command(BaseCommand):
         root = tk.Tk()
         root.withdraw()
 
+        # Pop up for chosing the shot sheet
         filepath = filedialog.askopenfilename()
 
         df  = pd.read_excel(filepath,
                         skiprows=0,)
+
+        ### REORGANIZE DATAFRAME ###
+
+        # find all the unnamed columns and columns with wrong names
+        # and assign them a non-zero value
         i=0
         ind=[]
         for col in df.columns:
@@ -35,15 +41,17 @@ class Command(BaseCommand):
                 i=0
                 ind.append(i)
 
+        # Take name from next row if the row was unnamed or wrong
         for col in df.columns:
             if ind[df.columns.get_loc(col)] != 0:
                 new = df[col][0].replace('\n',' ').split('(')[0].lower().strip()
                 df.rename(columns={col:new},inplace=True)
 
-
+        # remove first row and image file columns
         df = df.drop(0)
         df = df.drop(columns='dcim image file')
 
+        #rename duplicate columns EX: xd1 start time --> xd1 start time.1
         df.columns = pd.io.parsers.ParserBase({'names':df.columns})._maybe_dedup_names(df.columns)
 
         df = df.reset_index()

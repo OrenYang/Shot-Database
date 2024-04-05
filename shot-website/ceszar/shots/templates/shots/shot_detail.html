@@ -1,7 +1,13 @@
 {% extends "shots/base.html" %}
-{% block content %}
+{% block top %}
+<a href=" {{shot.get_previous_absolute_url }} " style="color:#13294b;"> < </a>
+<a href=" {{shot.get_next_absolute_url }} " style="color:#13294b;"> > </a>
+{% endblock top %}
+{% block detail %}
 
   <h1 style="color:#00629B">Shot {{shot.num}}</h1>
+  <h2 style="font-size:12pt">{{shot.time}}</h2>
+
   <div class='row'>
     <div class='col-sm-7' style='margin-bottom: 150px'>
       <button type="button" class="collapsible">Notes</button>
@@ -226,4 +232,4 @@
   }
   </script>
 
-{% endblock content %}
+{% endblock detail %}

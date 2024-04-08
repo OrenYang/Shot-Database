@@ -209,7 +209,12 @@
         <h2>
           {% for image in shot.xuvImage.all %}
             XUV Camera {{image.num}}
+<<<<<<< Updated upstream
         <br><img src="{{image.image.url}}" class='fit-image'><br>
+=======
+        </h2>
+        <img src="{{image.image.url}}" class='fit-image'>
+>>>>>>> Stashed changes
         {% endfor %}
       </div>
     </div>

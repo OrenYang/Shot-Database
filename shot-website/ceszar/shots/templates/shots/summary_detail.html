@@ -1,0 +1,87 @@
+{% extends "shots/base.html" %}
+{% block top %}
+<h1>
+  <a href=" {{shot.get_absolute_url }} " style="color:#00629B">Shot {{shot.num}}</a>
+</h1>
+<h1>
+  <a href=" {{shot.get_previous_summary_url }} " style="color:#13294b;"> < </a>
+  <a href=" {{shot.get_next_summary_url }} " style="color:#13294b;"> > </a>
+</h1>
+{% endblock top %}
+{% block images %}
+{% for image in shot.xuvImage.all %}
+<div class="container-2">
+  <div>
+    <h3>MCP 2</h3>
+    <img src="{{image.image.url}}" class="summary-image">
+  </div>
+  <div>
+    <h3>MCP 2</h3>
+    <div class="crop">
+      <img src="{{image.image.url}}" class="summary-image">
+    </div>
+  </div>
+</div>
+{% endfor %}
+<div class="container-3">
+  <div></div>
+  <div>
+    <table class='table table-bordered' style="color:#13294b;">
+      <tr>
+        {% if shot.gasConfig.outer and shot.gasConfig.inner %}
+          <th>OL Gas</th>
+          <th>OL Press</th>
+          <th>OL Time</th>
+          <th>IL Gas</th>
+          <th>IL Press</th>
+          <th>IL Time</th>
+        {% elif shot.gasConfig.inner or shot.gasConfig.outer %}
+          <th>Liner Gas</th>
+          <th>Liner Press</th>
+          <th>Liner Time</th>
+        {% endif %}
+        {% if shot.gasConfig.target %}
+          <th>CJ Gas</th>
+          <th>CJ Press</th>
+          <th>CJ Time</th>
+        {% endif %}
+      </tr>
+      <tr>
+        {% if shot.gasConfig.outer %}
+          <td>{{shot.gasConfig.outer}}</td>
+          <td>{{shot.outer_press}} psia</td>
+          <td>{{shot.outer_timing}} &#181;s</td>
+        {% endif %}
+        {% if shot.gasConfig.inner %}
+          <td>{{shot.gasConfig.inner}}</td>
+          <td>{{shot.inner_press}} psia</td>
+          <td>{{shot.inner_timing}} &#181;s</td>
+        {% endif %}
+        {% if shot.gasConfig.target %}
+          <td>{{shot.gasConfig.target}}</td>
+          <td>{{shot.target_press}} psia</td>
+          <td>{{shot.target_timing}} &#181;s</td>
+        {% endif %}
+      </tr>
+    </table>
+    <table class='table table-bordered' style="color:#13294b;">
+      <tr>
+        <td>
+          <h4>Current</h4>
+          <div>{{shot.current}} kA</div>
+        </td>
+        <td>
+          <h4>Peak Time</h4>
+          <div>{{shot.current_time}} ns</div>
+        </td>
+        {% if shot.dip_time %}
+        <td>
+          <h4>Dip Time [ns]</h4>
+          <div>{{shot.dip_time}}</div>
+        </td>
+        {% endif %}
+      </tr>
+    </table>
+  </div>
+</div>
+{% endblock images %}

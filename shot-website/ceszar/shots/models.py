@@ -110,6 +110,29 @@ class Shot(models.Model):
             prev = shots.last()
         return reverse('shot-detail', args=[str(prev.id)])
 
+    def get_summary_url(self):
+        return reverse('shot-summary', args=[str(self.id)])
+
+    def get_next_summary_url(self):
+        shots = Shot.objects.filter(num__gt=self.num)
+        shots = shots.order_by('num')
+        next = shots.first()
+        if next == None:
+            shots = Shot.objects.filter(num__lt=self.num)
+            shots = shots.order_by('num')
+            next = shots.first()
+        return reverse('shot-summary', args=[str(next.id)])
+
+    def get_previous_summary_url(self):
+        shots = Shot.objects.filter(num__lt=self.num)
+        shots = shots.order_by('num')
+        prev = shots.last()
+        if prev == None:
+            shots = Shot.objects.filter(num__gt=self.num)
+            shots = shots.order_by('num')
+            prev = shots.last()
+        return reverse('shot-summary', args=[str(prev.id)])
+
 
 class Filter(models.Model):
 

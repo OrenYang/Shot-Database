@@ -5,7 +5,9 @@
 {% endblock top %}
 {% block detail %}
 
-  <h1 style="color:#00629B">Shot {{shot.num}}</h1>
+  <h1>
+    <a href=" {{shot.get_summary_url }} " style="color:#00629B">Shot {{shot.num}}</a>
+  </h1>
   <h2 style="font-size:12pt">{{shot.time}}</h2>
 
   <div class='row'>

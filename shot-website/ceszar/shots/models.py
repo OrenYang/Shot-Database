@@ -118,7 +118,7 @@ class Filter(models.Model):
     thickness = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return '{}um {}'.format(self.thickness, self.mat)
+        return self.mat
 
 class XrayDetector(models.Model):
 

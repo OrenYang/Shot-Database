@@ -209,8 +209,12 @@
         <h2>
           {% for image in shot.xuvImage.all %}
             XUV Camera {{image.num}}
+<<<<<<< HEAD
         </h2>
         <img src="{{image.image.url}}" class='fit-image'>
+=======
+        <br><img src="{{image.image.url}}" class='fit-image'><br>
+>>>>>>> parent of fa80593 (shot summary)
         {% endfor %}
       </div>
     </div>

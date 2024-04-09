@@ -209,7 +209,8 @@
         <h2>
           {% for image in shot.xuvImage.all %}
             XUV Camera {{image.num}}
-        <br><img src="{{image.image.url}}" class='fit-image'><br>
+        </h2>
+        <img src="{{image.image.url}}" class='fit-image'>
         {% endfor %}
       </div>
     </div>

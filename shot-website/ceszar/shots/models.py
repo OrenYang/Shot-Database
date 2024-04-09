@@ -108,7 +108,6 @@ class Shot(models.Model):
             shots = Shot.objects.filter(num__gt=self.num)
             shots = shots.order_by('num')
             prev = shots.last()
-            return reverse('shot-detail', args=[str(prev.id)])
         return reverse('shot-detail', args=[str(prev.id)])
 
 

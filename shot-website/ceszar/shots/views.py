@@ -12,9 +12,6 @@ def home(request):
 class ShotListView(generic.ListView):
     model = Shot
 
+
 class ShotDetailView(generic.DetailView):
     model = Shot
-
-class ShotSummary(generic.DetailView):
-    model = Shot
-    template_name = 'shots/summary_detail.html'

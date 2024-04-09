@@ -1,15 +1,11 @@
 {% extends "shots/base.html" %}
 {% block top %}
-<h1>
-  <a href=" {{shot.get_previous_absolute_url }} " style="color:#13294b;"> < </a>
-  <a href=" {{shot.get_next_absolute_url }} " style="color:#13294b;"> > </a>
-</h1>
+<a href=" {{shot.get_previous_absolute_url }} " style="color:#13294b;"> < </a>
+<a href=" {{shot.get_next_absolute_url }} " style="color:#13294b;"> > </a>
 {% endblock top %}
 {% block detail %}
 
-  <h1>
-    <a href=" {{shot.get_summary_url }} " style="color:#00629B">Shot {{shot.num}}</a>
-  </h1>
+  <h1 style="color:#00629B">Shot {{shot.num}}</h1>
   <h2 style="font-size:12pt">{{shot.time}}</h2>
 
   <div class='row'>
@@ -213,7 +209,6 @@
         <h2>
           {% for image in shot.xuvImage.all %}
             XUV Camera {{image.num}}
-        </h2>
         <br><img src="{{image.image.url}}" class='fit-image'><br>
         {% endfor %}
       </div>

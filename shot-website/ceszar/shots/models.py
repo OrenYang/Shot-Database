@@ -133,6 +133,9 @@ class Shot(models.Model):
             prev = shots.last()
         return reverse('shot-summary', args=[str(prev.id)])
 
+    class Meta:
+        ordering = ['num']
+
 
 class Filter(models.Model):
 

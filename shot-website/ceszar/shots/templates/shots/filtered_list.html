@@ -1,35 +1,89 @@
 {% extends "shots/base.html" %}
 
 {% block content %}
-    <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
-
-    <table class='table table-bordered' style='margin-bottom: 150px'>
-        <tr>
-          <th>Shot Number</th>
-          <th>Gas Configuration</th>
-          <th>Current [kA]</th>
-        </tr>
-        {% for shot in filter.qs %}
-        <tr>
+<button type="button" class="collapsible">Filters</button>
+<div class='content' style="display: block">
+  <form method="get">
+    {% for obj in filter.form %}
+    {% if 'time' in obj.name %}
+      <div>{{obj.label}}: {{obj}}</div><br>
+    {% endif %}
+    {% if 'date' in obj.name %}
+      <div>{{obj.label}}: {{obj}}</div><br>
+    {% endif %}
+    {% endfor %}
+    <table style="width:100%">
+      <tr>
+        {% for obj in filter.form %}
+        {% if 'current' in obj.name %}
           <td>
-            <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a>
+            {{ obj.label }}:<br>{{ obj }}
           </td>
-          <td> {{shot.gasConfig}} </td>
-          {% if shot.inner_press >= 10 %}
-            <td bgcolor='#d6b4fc'>
-          {% elif shot.outer_press >= 10 %}
-            <td bgcolor='#d6b4fc'>
-          {% elif shot.current >= 400 %}
-            <td bgcolor='lightgreen'>
-          {% else %}
-            <td>
-          {% endif %}
-          {{shot.current}}</td>
-
-        </tr>
+        {% endif %}
         {% endfor %}
-      </table>
+      </tr>
+      <tr>
+        {% for obj in filter.form %}
+        {% if 'gasConfig' in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+    </table>
+    <br>
+    <table style="width:100%">
+      <tr>
+        <td style="width:50%"><input type="submit" /></td>
+        <td> Sort by: {{ filter.form.o }}</td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<table class='table table-bordered' style='margin-bottom: 150px; margin-top:20px'>
+  <tr>
+    <th>Shot Number</th>
+    <th>Gas Configuration</th>
+    <th>Current [kA]</th>
+  </tr>
+  {% for shot in filter.qs %}
+  <tr>
+    <td>
+      <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a>
+    </td>
+    <td> {{shot.gasConfig}} </td>
+    {% if shot.inner_press >= 10 %}
+      <td bgcolor='#d6b4fc'>
+    {% elif shot.outer_press >= 10 %}
+      <td bgcolor='#d6b4fc'>
+    {% elif shot.current >= 400 %}
+      <td bgcolor='lightgreen'>
+    {% else %}
+      <td>
+    {% endif %}
+    {{shot.current}}</td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
 {% endblock %}

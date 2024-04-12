@@ -48,7 +48,8 @@ class GasConfig(models.Model):
 
 class Shot(models.Model):
 
-    time = models.DateTimeField()
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
     num = models.IntegerField(null=True, blank=True)
 
     loadType = models.CharField(null=True, blank=True, max_length=100)

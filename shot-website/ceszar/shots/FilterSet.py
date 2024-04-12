@@ -10,6 +10,9 @@ class ShotFilter(django_filters.FilterSet):
     gasConfig__inner__gas = django_filters.CharFilter(lookup_expr='icontains')
     gasConfig__outer__gas = django_filters.CharFilter(lookup_expr='icontains')
 
+    time = django_filters.TimeFilter(field_name='time',lookup_expr='icontains')
+    date = django_filters.DateFilter(field_name='date',lookup_expr='icontains')
+
     o = django_filters.OrderingFilter(
             fields=(
                 ('num', 'num'),
@@ -20,4 +23,4 @@ class ShotFilter(django_filters.FilterSet):
 
     class Meta:
         model = Shot
-        fields = ['current','gasConfig',]
+        fields = ['current','gasConfig','time','date']

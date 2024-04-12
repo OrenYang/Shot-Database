@@ -3,19 +3,12 @@
 {% block content %}
 <button type="button" class="collapsible">Filters</button>
 <div class='content' style="display: block">
+  <div>{{ filter.qs.distinct|length }} Shots meet criteria</div>
   <form method="get">
-    {% for obj in filter.form %}
-    {% if 'time' in obj.name %}
-      <div>{{obj.label}}: {{obj}}</div><br>
-    {% endif %}
-    {% if 'date' in obj.name %}
-      <div>{{obj.label}}: {{obj}}</div><br>
-    {% endif %}
-    {% endfor %}
     <table style="width:100%">
       <tr>
         {% for obj in filter.form %}
-        {% if 'current' in obj.name %}
+        {% if 'current' in obj.name and 'time' not in obj.name %}
           <td>
             {{ obj.label }}:<br>{{ obj }}
           </td>
@@ -31,7 +24,48 @@
         {% endif %}
         {% endfor %}
       </tr>
+      <tr>
+        {% for obj in filter.form %}
+        {% if 'xray' in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
     </table>
+    <button type="button" class="collapsible-2">More Filters</button>
+    <div class='content' style="display: none">
+      <table style="width:100%">
+        <tr>
+          {% for obj in filter.form %}
+          {% if 'date' in obj.name %}
+            <td>
+              {{ obj.label }}:<br>{{ obj }}
+            </td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for obj in filter.form %}
+          {% if 'time' in obj.name and 'current' not in obj.name and 'xray' not in obj.name %}
+            <td>
+              {{ obj.label }}:<br>{{ obj }}
+            </td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for obj in filter.form %}
+          {% if 'current' in obj.name and 'time' in obj.name %}
+            <td>
+              {{ obj.label }}:<br>{{ obj }}
+            </td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+      </table>
+    </div>
     <br>
     <table style="width:100%">
       <tr>
@@ -48,7 +82,7 @@
     <th>Gas Configuration</th>
     <th>Current [kA]</th>
   </tr>
-  {% for shot in filter.qs %}
+  {% for shot in filter.qs.distinct %}
   <tr>
     <td>
       <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a>
@@ -76,6 +110,23 @@ var i;
 for (i = 0; i < coll.length; i++) {
   coll[i].addEventListener("click", function() {
     this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+<script>
+var coll = document.getElementsByClassName("collapsible-2");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active-2");
     var content = this.nextElementSibling;
     if (content.style.display === "block") {
       content.style.display = "none";

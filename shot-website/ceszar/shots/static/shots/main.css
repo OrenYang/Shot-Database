@@ -77,6 +77,11 @@ ul {
   color: #747678;
 }
 
+.active-2, .collapsible-2:hover {
+  background-color: #00629B;
+  color: white;
+}
+
 .content {
   padding: 0 0px;
   display: none;

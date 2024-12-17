@@ -52,10 +52,10 @@ class Shot(models.Model):
     time = models.TimeField(null=True, blank=True)
     num = models.IntegerField(null=True, blank=True)
 
-    loadType = models.CharField(null=True, blank=True, max_length=100)
+    loadType = models.CharField(null=True, blank=True, max_length=200)
 
-    preNotes = models.CharField(null=True, blank=True, max_length=500)
-    postNotes = models.CharField(null=True, blank=True, max_length=500)
+    preNotes = models.CharField(null=True, blank=True, max_length=1000)
+    postNotes = models.CharField(null=True, blank=True, max_length=1000)
 
     gasConfig = models.ForeignKey(GasConfig, on_delete=models.PROTECT, null=True, related_name='shot')
     outer_press = models.FloatField(null=True, blank=True)

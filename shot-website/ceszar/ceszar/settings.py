@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-igw-44m&^6i@kywil^d*%5g#^*474cp+f9h4)$8ha-pi($xivx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','192.168.1.77','100.82.145.222', '100.64.212.205']
+ALLOWED_HOSTS = ['localhost','192.168.1.77','100.82.145.222', '100.64.212.205','*']
 
 
 # Application definition
@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'ceszar.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'shot_website',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

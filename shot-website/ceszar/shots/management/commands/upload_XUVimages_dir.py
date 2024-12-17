@@ -21,6 +21,11 @@ class Command(BaseCommand):
                 shot = filename[:4]
                 num = filename.split('.')[0][-1]
 
+                try:
+                    num = float(num)
+                except Exception:
+                    continue
+
                 if filename.split('_')[1][0] != 'M':
                     continue
 

@@ -2,6 +2,11 @@ body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
+  height: 100%;
+}
+
+html {
+  height:100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -10,6 +15,11 @@ h1, h2, h3, h4, h5, h6 {
 
 h3, h2 {
   margin-bottom:0px;
+}
+
+h2{
+  width:100%;
+  object-fit: contain;
 }
 
 h4 {
@@ -42,9 +52,22 @@ ul {
   margin-bottom: 0px;
 }
 
-.fit-image{
-  width: 500px;
-  height: 500px;
+.col-sm-7 {
+  margin-left: -20px; /* Adjust this value as needed */
+}
+
+.col-5 {
+  /* Expand the width if needed */
+  width: 100%; /* or you can try a smaller value like 80% for a more centered effect */
+  padding-left: 0; /* Ensure there's no padding on the left side */
+  margin-left: 0; /* Remove any default margin */
+}
+
+.fit-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer; /* Optional: makes the image clickable */
 }
 
 .sticky {
@@ -99,19 +122,21 @@ ul {
 }
 
 .summary-image {
-  width: 350px;
-  height: 350px;
-  padding: 0px;
+  width: 100%;
+  height: auto;
+  padding: .1%;
+  object-fit: contain;
+  cursor: pointer;
 }
 
 .container-2 {
-  margin-top: -50px;
+  margin-top: -30px;
   display: grid;
-  grid-template-columns:33% 33% 33%;
+  grid-template-columns:25% 25% 25% 25%;
   align-items: center;
   text-align: center;
-  margin-left:50px;
-  margin-right:50px;
+  margin-left:20px;
+  margin-right:20px;
 }
 
 .container-3 {
@@ -136,4 +161,103 @@ ul {
     width: 500px;
     height: 500px;
     margin: -80px 0 0 -50px;
+}
+
+/* Slideshow container styling */
+.slideshow-container {
+  position: relative;
+  width: 120%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Containers {
+  display: none;
+  text-align: center;
+}
+
+/* Arrows */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional: Background for better visibility */
+  border-radius: 50%; /* Optional: Circular design */
+  user-select: none;
+  z-index: 10;
+}
+
+.prev {
+  left: 10px; /* Position the left arrow slightly inside the image container */
+}
+
+.next {
+  right: 10px; /* Position the right arrow slightly inside the image container */
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+.dots-container, .title-container {
+  display: flex;
+  justify-content: center;
+  width: 120%;
+  margin-top: 10px; /* Adjust margin to ensure proper spacing */
+}
+
+.title-container {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #13294b;
+}
+
+/* Dots/styling */
+.dots-container {
+  text-align: center;
+  padding: 15px;
+}
+
+.dots {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.enable, .dots:hover {
+  background-color: #717171;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullscreen img {
+  margin-top: 2%;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
 }

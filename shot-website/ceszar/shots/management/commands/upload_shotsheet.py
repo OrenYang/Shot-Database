@@ -60,6 +60,7 @@ class Command(BaseCommand):
             if '*' in str(row['SHOT #']):
                 row['SHOT #']=float(str(row['SHOT #']).replace('*',''))
                 df.loc[index,'SHOT #']=row['SHOT #']
+                df.loc[index,'post-shot notes'] = str(df.loc[index,'post-shot notes'])
                 df.loc[index,'post-shot notes']+='*a B-dot is not working'
             if math.isnan(row['SHOT #']):
                 date = row['load type']
@@ -77,6 +78,7 @@ class Command(BaseCommand):
                         df.loc[index, col]=row[col]
                 except Exception:
                     continue
+            row['t dip?']=None
 
             gasses = []
             config = []
@@ -89,6 +91,10 @@ class Command(BaseCommand):
                 gasses.append(gas_model_target)
                 config.append('target')
 
+            if not row['lv press'] and not row['tv press']:
+                continue
+
+
             if config[0]=='liner' and len(config)==2:
                 gasConfig_model = GasConfig.objects.get_or_create(outer=None, inner=gasses[0], target=gasses[1])[0]
             elif config[0]=='target':
@@ -96,9 +102,34 @@ class Command(BaseCommand):
             elif config[0]=='liner':
                 gasConfig_model = GasConfig.objects.get_or_create(outer=None, inner=gasses[0], target=None)[0]
 
-            row['date'] = make_aware(row['date'])
+            if isinstance(row['date'], str):
+                 naive_datetime = datetime.strptime(row['date'], '%Y-%m-%d %H:%M:%S')  # Adjust the format if needed
+                 row['date'] = make_aware(naive_datetime, pytz.timezone('America/Los_Angeles'))  # Adjust the timezone if needed
 
-            shot_model, created = Shot.objects.get_or_create(num=row['SHOT #'],defaults={'time':row['date'],'loadType':row['load type'],'preNotes':row['pre-shot notes'],'postNotes':row['post-shot notes'],'gasConfig':gasConfig_model,'inner_press':row['lv press'],'target_press':row['tv press'],'inner_timing':row['lv timing'],'target_timing':row['tv timing'],'current':row['ipeak'],'current_time':row['tpeak'],'dip_time':row['t dip?'],'cavity_v':row['v cavity'],'cavity_p':row['p cavity'],'trigger_v':row['v trigger'],'trigger_p':row['p trigger'],'maxwell_p':row['p maxwell'],'premag_v':row['v premag'],'premag_t':row['t premag'],'pressure':row['vacuum'],'amfCharge':row['charge'],'amfB':row['bz']})
+            shot_model, created = Shot.objects.get_or_create(num=row['SHOT #'], defaults={
+                'date': row['date'],
+                'loadType': row['load type'],
+                'preNotes': row['pre-shot notes'],
+                'postNotes': row['post-shot notes'],
+                'gasConfig': gasConfig_model,
+                'inner_press': row['lv press'],
+                'target_press': row['tv press'],
+                'inner_timing': row['lv timing'],
+                'target_timing': row['tv timing'],
+                'current': row['ipeak'],
+                'current_time': row['tpeak'],
+                'dip_time': row['t dip?'],
+                'cavity_v': row['v cavity'],
+                'cavity_p': row['p cavity'],
+                'trigger_v': row['v trigger'],
+                'trigger_p': row['p trigger'],
+                'maxwell_p': row['p maxwell'],
+                'premag_v': row['v premag'],
+                'premag_t': row['t premag'],
+                'pressure': row['vacuum'],
+                'amfCharge': row['charge'],
+                'amfB': row['bz']
+            })
 
             if row['Bubble detector'] is not None:
                 shot_model.bubbles=row['Bubble detector']

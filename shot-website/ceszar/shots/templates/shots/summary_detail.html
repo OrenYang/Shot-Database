@@ -1,31 +1,41 @@
 {% extends "shots/base.html" %}
-
+{% load static %}
 {% block top %}
 <h1>
-  <a href=" {{shot.get_absolute_url }} " style="color:#00629B">Shot {{shot.num}}</a>
-</h1>
-<h1>
-  <a href=" {{shot.get_previous_summary_url }} " style="color:#13294b;"> < </a>
-  <a href=" {{shot.get_next_summary_url }} " style="color:#13294b;"> > </a>
+  <a href=" {% url 'shot-detail' shot.pk %}?{{ request.GET.urlencode }} " style="color:#00629B">Shot {{shot.num}}</a>
+
+  {% if previous_shot %}
+      <a href="{{ previous_url }}" style="color:#13294b;">&laquo;</a>
+  {% endif %}
+
+  {% if next_shot %}
+      <a href="{{ next_url }}" style="color:#13294b;">&raquo;</a>
+  {% endif %}
 </h1>
 {% endblock top %}
 {% block images %}
-{% for image in shot.xuvImage.all %}
 <div class="container-2">
+{% for image in shot.xuvImage.all %}
   <div>
-    <h3>MCP 2</h3>
+    <h3>XUV Camera {{image.num}}</h3>
     <img src="{{image.image.url}}" class="summary-image">
   </div>
-  <div>
-    <h3>MCP 2</h3>
-    <div class="crop">
-      <img src="{{image.image.url}}" class="summary-image">
-    </div>
-  </div>
-</div>
 {% endfor %}
+{% for image in shot.schlieren.all %}
+  <div>
+    <h3>Schlieren {{image.num}}</h3>
+    <img src="{{image.image.url}}" class="summary-image">
+  </div>
+{% endfor %}
+</div>
 <div class="container-3">
-  <div></div>
+  <div>
+    {% for image in shot.scopePlots.all %}
+    <div>
+      <img src="{{image.current.url}}" class='summary-image'>
+    </div>
+    {% endfor %}
+  </div>
   <div>
     <table class='table table-bordered' style="color:#13294b;">
       <tr>
@@ -77,12 +87,52 @@
         </td>
         {% if shot.dip_time %}
         <td>
-          <h4>Dip Time [ns]</h4>
+          <h4>Dip Time</h4>
           <div>{{shot.dip_time}}</div>
+        </td>
+        {% endif %}
+        {% if shot.xrayDetector.all %}
+        <td>
+          <h4>X-Ray Time</h4>
+          {% for xd in shot.xrayDetector.all %}
+            {% if xd.peak_time %}
+              {{xd.peak_time|floatformat:1}},
+            {% else %}
+              -
+            {% endif %}
+          {% endfor %}
         </td>
         {% endif %}
       </tr>
     </table>
   </div>
 </div>
+
+<div id="navigation"
+   data-previous-url="{{ previous_url }}"
+   data-next-url="{{ next_url }}"
+   data-other-url=" {% url 'shot-detail' shot.pk %}?{{ request.GET.urlencode }} ">
+</div>
+<script src="{% static 'shots/navigation.js' %}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select all images in the slideshow
+    const images = document.querySelectorAll(".summary-image");
+
+    images.forEach(image => {
+      image.addEventListener("click", function () {
+        const parent = this.parentElement;
+
+        // Toggle fullscreen class
+        if (parent.classList.contains("fullscreen")) {
+          parent.classList.remove("fullscreen");
+        } else {
+          parent.classList.add("fullscreen");
+        }
+      });
+    });
+  });
+</script>
+
 {% endblock images %}

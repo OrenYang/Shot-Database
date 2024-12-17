@@ -91,51 +91,24 @@ class Shot(models.Model):
     def get_absolute_url(self):
         return reverse('shot-detail', args=[str(self.id)])
 
-    def get_next_absolute_url(self):
-        shots = Shot.objects.filter(num__gt=self.num)
-        shots = shots.order_by('num')
-        next = shots.first()
-        if next == None:
-            shots = Shot.objects.filter(num__lt=self.num)
-            shots = shots.order_by('num')
-            next = shots.first()
-        return reverse('shot-detail', args=[str(next.id)])
-
-    def get_previous_absolute_url(self):
-        shots = Shot.objects.filter(num__lt=self.num)
-        shots = shots.order_by('num')
-        prev = shots.last()
-        if prev == None:
-            shots = Shot.objects.filter(num__gt=self.num)
-            shots = shots.order_by('num')
-            prev = shots.last()
-        return reverse('shot-detail', args=[str(prev.id)])
-
     def get_summary_url(self):
         return reverse('shot-summary', args=[str(self.id)])
 
-    def get_next_summary_url(self):
-        shots = Shot.objects.filter(num__gt=self.num)
-        shots = shots.order_by('num')
-        next = shots.first()
-        if next == None:
-            shots = Shot.objects.filter(num__lt=self.num)
-            shots = shots.order_by('num')
-            next = shots.first()
-        return reverse('shot-summary', args=[str(next.id)])
-
-    def get_previous_summary_url(self):
-        shots = Shot.objects.filter(num__lt=self.num)
-        shots = shots.order_by('num')
-        prev = shots.last()
-        if prev == None:
-            shots = Shot.objects.filter(num__gt=self.num)
-            shots = shots.order_by('num')
-            prev = shots.last()
-        return reverse('shot-summary', args=[str(prev.id)])
-
     class Meta:
-        ordering = ['num']
+        ordering = ['-num']
+
+class ScopePlots(models.Model):
+
+    shot = models.ForeignKey(Shot, on_delete=models.CASCADE, related_name='scopePlots', null=True)
+    name = 'scope'
+
+    extras = models.ImageField(upload_to=image_upload_dir, default='images/noImage.png',null=True, blank=True)
+    gas_timing = models.ImageField(upload_to=image_upload_dir, default='images/noImage.png',null=True, blank=True)
+    current = models.ImageField(upload_to=image_upload_dir, default='images/noImage.png',null=True, blank=True)
+    switches = models.ImageField(upload_to=image_upload_dir, default='images/noImage.png',null=True, blank=True)
+
+    def __str__(self):
+        return 'Scope Plots from shot {}'.format(self.shot.num)
 
 
 class Filter(models.Model):
@@ -165,7 +138,7 @@ class XuvImage(models.Model):
     name = 'xuv'
     shot = models.ForeignKey(Shot, on_delete=models.CASCADE, related_name='xuvImage', null=True)
     num = models.IntegerField(null=True, blank=True)
-    charge = models.FloatField(null=True, blank=True, default=4.4)
+    charge = models.FloatField(null=True, blank=True)
 
     frame1 = models.FloatField(null=True, blank=True)
     frame2 = models.FloatField(null=True, blank=True)
@@ -222,4 +195,20 @@ class Spectrometer(models.Model):
     xuv = models.CharField(null=True, blank=True, max_length=50)
 
     def __str__(self):
-        return 'Spectrometer {} from shot {}'.format(self.num, self.shot.num)
+        return 'Spectrometer from shot {}'.format(self.shot.num)
+
+class ActivationDetector(models.Model):
+
+    name = 'activation'
+    shot = models.ForeignKey(Shot, on_delete=models.CASCADE, related_name='activationDetector', null=True)
+    num = models.IntegerField(null=True, blank=True)
+
+    distance = models.FloatField(null=True, blank=True)
+    fluence = models.FloatField(null=True, blank=True)
+    error = models.FloatField(null=True, blank=True)
+    n_yield = models.FloatField(null=True, blank=True)
+
+    plots = models.ImageField(upload_to=image_upload_dir, default='images/noImage.png', null=True, blank=True)
+
+    def __str__(self):
+        return 'AD{} from shot {}'.format(self.num, self.shot.num)

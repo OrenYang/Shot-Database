@@ -1,12 +1,21 @@
 {% extends "shots/base.html" %}
+{% load static %}
 {% block top %}
-<a href=" {{shot.get_previous_absolute_url }} " style="color:#13294b;"> < </a>
-<a href=" {{shot.get_next_absolute_url }} " style="color:#13294b;"> > </a>
+<div>
+    {% if previous_shot %}
+        <a href="{{ previous_url }}" style="color:#13294b;">&laquo;</a>
+    {% endif %}
+
+    {% if next_shot %}
+        <a href="{{ next_url }}" style="color:#13294b;">&raquo;</a>
+    {% endif %}
+</div>
+<div><a href="{% url 'shots-list' %}?{{ request.GET.urlencode }}" style="color:#13294b;"> return </a></div>
 {% endblock top %}
 {% block detail %}
 
   <h1>
-    <a href=" {{shot.get_summary_url }} " style="color:#00629B">Shot {{shot.num}}</a>
+    <a href=" {% url 'shot-summary' shot.pk %}?{{ request.GET.urlencode }} " style="color:#00629B">Shot {{shot.num}}</a>
   </h1>
   <h2 style="font-size:12pt">{{shot.date}}; {{shot.time}}</h2>
 
@@ -160,15 +169,20 @@
       <button type="button" class="collapsible">Time-Gated XUV Imaging</button>
       <div class='content' style='display: block'>
         <table class='table table-bordered ' style="color:#13294b">
-          <tr><th width='22%'></th><th>Frame 1 [ns]</th><th>Frame 2 [ns]</th><th>Frame 3 [ns]</th><th>Frame 4 [ns]</th><th>Charge [kV]</th></tr>
+          <tr><th width='22%'></th><th>Frame 1 [ns]</th><th>Frame 2 [ns]</th><th>Frame 3 [ns]</th><th>Frame 4 [ns]</th>
+          {% if image.charge %}
+            <th>Charge [kV]</th></tr>
+          {% endif %}
           {% for image in shot.xuvImage.all %}
           <tr>
             <th>XUV Camera {{image.num}}</th>
-            <td>{{image.frame1}}</td>
-            <td>{{image.frame2}}</td>
-            <td>{{image.frame3}}</td>
-            <td>{{image.frame4}}</td>
-            <td>{{image.charge}}</td>
+            <td>{{image.frame1|floatformat:2}}</td>
+            <td>{{image.frame2|floatformat:2}}</td>
+            <td>{{image.frame3|floatformat:2}}</td>
+            <td>{{image.frame4|floatformat:2}}</td>
+            {% if image.charge %}
+              <td>{{image.charge}}</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </table>
@@ -206,14 +220,65 @@
         </table>
       </div>
     </div>
-    <div class='col-sm-5'>
+    <div class='col-5'>
       <div class='sticky'>
-        <h2>
+        <div class="title-container">
+          <h2>IMAGES</h2>
+        </div>
+
+        <div class="slideshow-container">
           {% for image in shot.xuvImage.all %}
-            XUV Camera {{image.num}}
-        </h2>
-        <img src="{{image.image.url}}" class='fit-image'>
-        {% endfor %}
+            <div class="Containers">
+              <h3>XUV Camera {{image.num}}</h3>
+              <img src="{{image.image.url}}" class='fit-image'>
+            </div>
+          {% endfor %}
+          {% for image in shot.schlieren.all %}
+            <div class="Containers">
+              <h3>Schlieren {{image.num}}</h3>
+              <img src="{{image.image.url}}" class='fit-image'>
+            </div>
+          {% endfor %}
+          {% for image in shot.scopePlots.all %}
+            <div class="Containers">
+              <h3>Current</h3>
+              <img src="{{image.current.url}}" class='fit-image'>
+            </div>
+            <div class="Containers">
+              <h3>Gas Timing</h3>
+              <img src="{{image.gas_timing.url}}" class='fit-image'>
+            </div>
+            <div class="Containers">
+              <h3>Switches</h3>
+              <img src="{{image.switches.url}}" class='fit-image'>
+            </div>
+            <div class="Containers">
+              <h3>Extras</h3>
+              <img src="{{image.extras.url}}" class='fit-image'>
+            </div>
+          {% endfor %}
+
+          <!-- Navigation buttons -->
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+
+        <!-- Dots for navigation -->
+        <div class="dots-container">
+          {% for image in shot.xuvImage.all %}
+            <span class="dots" onclick="currentSlide({{ forloop.counter }})"></span>
+          {% endfor %}
+          {% for image in shot.schlieren.all %}
+            <span class="dots" onclick="currentSlide({{ forloop.counter|add:shot.xuvImage.count }})"></span>
+          {% endfor %}
+          {% for image in shot.scopePlots.all %}
+            <!-- Increment dot index for each image field within scopePlots -->
+            <span class="dots" onclick="currentSlide({{ forloop.counter|add:shot.xuvImage.count|add:shot.schlieren.count }})"></span>
+            <span class="dots" onclick="currentSlide({{ forloop.counter|add:shot.xuvImage.count|add:shot.schlieren.count|add:1 }})"></span>
+            <span class="dots" onclick="currentSlide({{ forloop.counter|add:shot.xuvImage.count|add:shot.schlieren.count|add:2 }})"></span>
+            <span class="dots" onclick="currentSlide({{ forloop.counter|add:shot.xuvImage.count|add:shot.schlieren.count|add:3 }})"></span>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
@@ -234,5 +299,34 @@
     });
   }
   </script>
+
+  <script src="{% static 'shots/carousel.js' %}"></script>
+
+  <div id="navigation"
+     data-previous-url="{{ previous_url }}"
+     data-next-url="{{ next_url }}"
+     data-other-url=" {% url 'shot-summary' shot.pk %}?{{ request.GET.urlencode }} ">
+  </div>
+  <script src="{% static 'shots/navigation.js' %}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select all images in the slideshow
+    const images = document.querySelectorAll(".fit-image");
+
+    images.forEach(image => {
+      image.addEventListener("click", function () {
+        const parent = this.parentElement;
+
+        // Toggle fullscreen class
+        if (parent.classList.contains("fullscreen")) {
+          parent.classList.remove("fullscreen");
+        } else {
+          parent.classList.add("fullscreen");
+        }
+      });
+    });
+  });
+</script>
 
 {% endblock detail %}

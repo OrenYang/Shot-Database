@@ -8,6 +8,15 @@
     <table style="width:100%">
       <tr>
         {% for obj in filter.form %}
+        {% if 'num' in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for obj in filter.form %}
         {% if 'current' in obj.name and 'time' not in obj.name %}
           <td>
             {{ obj.label }}:<br>{{ obj }}
@@ -26,7 +35,34 @@
       </tr>
       <tr>
         {% for obj in filter.form %}
+        {% if 'press' in obj.name and 'gt' not in obj.name and 'lt' not in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for obj in filter.form %}
+        {% if 'timing' in obj.name and 'gt' not in obj.name and 'lt' not in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for obj in filter.form %}
         {% if 'xray' in obj.name %}
+          <td>
+            {{ obj.label }}:<br>{{ obj }}
+          </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for obj in filter.form %}
+        {% if 'xuv' in obj.name %}
           <td>
             {{ obj.label }}:<br>{{ obj }}
           </td>
@@ -45,6 +81,29 @@
             </td>
           {% endif %}
           {% endfor %}
+        </tr>
+        <tr>
+          {% for obj in filter.form %}
+          {% if 'Notes' in obj.name %}
+            <td>
+              {{ obj.label }}:<br>{{ obj }}
+            </td>
+          {% endif %}
+          {% endfor %}
+        </tr>
+        <tr>
+          <td>
+            Outer liner pressure greater than:<br>{{ filter.form.outer_press__gt }}
+          </td>
+          <td>
+            Outer liner pressure less than:<br>{{ filter.form.outer_press__lt }}
+          </td>
+          <td>
+            Outer liner timing greater than:<br>{{ filter.form.outer_timing__gt }}
+          </td>
+          <td>
+            Outer liner timing less than:<br>{{ filter.form.outer_timing__lt }}
+          </td>
         </tr>
         <tr>
           {% for obj in filter.form %}
@@ -85,7 +144,7 @@
   {% for shot in filter.qs.distinct %}
   <tr>
     <td>
-      <a href=" {{shot.get_absolute_url }} " style="color:#13294b"> Shot {{ shot.num }}</a>
+      <a href="{% url 'shot-detail' shot.pk %}?{{ request.GET.urlencode }}" style="color:#13294b"> Shot {{ shot.num }}</a>
     </td>
     <td> {{shot.gasConfig}} </td>
     {% if shot.inner_press >= 10 %}

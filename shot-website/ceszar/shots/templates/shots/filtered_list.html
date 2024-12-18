@@ -106,6 +106,34 @@
           </td>
         </tr>
         <tr>
+          <td>
+            Inner liner pressure greater than:<br>{{ filter.form.inner_press__gt }}
+          </td>
+          <td>
+            Inner liner pressure less than:<br>{{ filter.form.inner_press__lt }}
+          </td>
+          <td>
+            Inner liner timing greater than:<br>{{ filter.form.inner_timing__gt }}
+          </td>
+          <td>
+            Inner liner timing less than:<br>{{ filter.form.inner_timing__lt }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Target pressure greater than:<br>{{ filter.form.target_press__gt }}
+          </td>
+          <td>
+            Target pressure less than:<br>{{ filter.form.target_press__lt }}
+          </td>
+          <td>
+            Target timing greater than:<br>{{ filter.form.target_timing__gt }}
+          </td>
+          <td>
+            Target timing less than:<br>{{ filter.form.target_timing__lt }}
+          </td>
+        </tr>
+        <tr>
           {% for obj in filter.form %}
           {% if 'time' in obj.name and 'current' not in obj.name and 'xray' not in obj.name %}
             <td>

@@ -9,7 +9,7 @@ services:
     plan: free
     name: ceszar
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "./shot-website/ceszar/build.sh"
     startCommand: "python -m gunicorn ceszar.asgi:application -k uvicorn.workers.UvicornWorker"
     envVars:
       - key: DATABASE_URL

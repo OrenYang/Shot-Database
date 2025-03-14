@@ -52,7 +52,10 @@ class Command(BaseCommand):
         df = df.drop(columns='dcim image file')
 
         #rename duplicate columns EX: xd1 start time --> xd1 start time.1
-        df.columns = pd.io.parsers.ParserBase({'names':df.columns})._maybe_dedup_names(df.columns)
+        df.columns = [
+            f'{col}.{sum(df.columns[:i] == col)}' if dup else col
+            for i, (col, dup) in enumerate(zip(df.columns, df.columns.duplicated()))
+        ]
 
         df = df.reset_index()
 

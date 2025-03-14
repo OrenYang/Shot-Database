@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'ceszar.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://postgres:password@localhost:5432/shot_website',
+        default='postgresql://orenyang:password@localhost:5432/shot_website',
         conn_max_age=600
     )
 }
